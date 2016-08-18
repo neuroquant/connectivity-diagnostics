@@ -12,6 +12,9 @@ function [h1 h2] =  plot_correlations(Xdata)
 %     - p is the number of voxels or brain regions
 %     - n is the number of subjects
 %
+% Outputs
+% h1,h2 - structures that contain handles to the main figure and subplots
+
   [m p n] = size(Xdata);
 
   % Mode: Separate Subject, Separable Spatio-Temporal Structure
