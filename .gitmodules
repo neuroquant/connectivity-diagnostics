@@ -1,0 +1,3 @@
+[submodule "ggm-external"]
+	path = ggm-external
+	url = http://github.com/mnarayan/ggmClass
