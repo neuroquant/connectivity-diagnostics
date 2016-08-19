@@ -18,8 +18,15 @@ function [Sigmab Sigma] = covjackknife(X,varargin)
   switch nargin
     case 2
     	permdim = [1 2 3]; 
+	    useRobust = 0;
+		
     case 3
 	  	permdim = varargin{1};
+	    useRobust = 0;
+		
+	case 4
+	  	permdim = varargin{1};
+		useRobust = varargin{2}; 
 	otherwise
     	disp('3 or more inputs not yet supported');
       	permdim = [1 1 1]; 
@@ -31,7 +38,6 @@ function [Sigmab Sigma] = covjackknife(X,varargin)
     error('No samples in the 3rd matrix dimension to resample');
   end
 
-  useRobust = 0;
   useTemporal = 0;
 
   % Options other than 3 not being used
@@ -46,14 +52,20 @@ function [Sigmab Sigma] = covjackknife(X,varargin)
 
  Sigma = zeros(p,p,n); 
  for cc=1:n
-	 Sigma(:,:,cc) = corr(X(:,:,cc)); 
+	 if(~useRobust)
+		 Sigma(:,:,cc) = corr(X(:,:,cc)); 
+	 else
+		 tmpobj = GGM(X(:,:,cc)); 
+		 tmpobj.tylerMLE();
+		 Sigma(:,:,cc) = tmpobj.Sigma;
+	 end
  end
 
  
  Sigmab = zeros(p,p,n_resamples);
  all_n = [1:n_resamples];
   for r=1:n_resamples
-    Sigmab(:,:,r) = mean(Sigma(:,:,setdiff(all_n,r)),3);
+   	   	Sigmab(:,:,r) = mean(Sigma(:,:,setdiff(all_n,r)),3);
   end
 
 end
