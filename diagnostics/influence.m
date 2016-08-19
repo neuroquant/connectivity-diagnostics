@@ -9,11 +9,12 @@ function [score] = influence(Sigmab,Sigma)
 	meanCov = mean(Sigma,3); 
 	% replace with robust estimate?
 	
-	%varCov = squeeze(sum(sum(bsxfun(@minus, meanCov,Sigma).^2,1),2));	
+	varCov = squeeze(sum(sum(bsxfun(@minus, meanCov,Sigma).^2,1),2));	
 	for cc=1:n
 		score(cc) = frob_err(Sigmab(:,:,cc),meanCov);
+		%mean(varCov(setdiff(1:n,cc))) 
 	end
-	%score = score/(2*mean(varCov));
+	score = score/(2*mean(score));
 
 
 	% Toman's estimate? varCov definition not clear; 
