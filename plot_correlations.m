@@ -1,4 +1,4 @@
-function [score_t score_s h1 h2 h3] =  plot_correlations(Xdata)
+function [score_t score_s score_p h1 h2 h3] =  plot_correlations(Xdata)
 % function [h1 h2] = plot_correlations(Xdata)
 % This function plots the following figures
 %   Figure 1a: Global Temporal Correlation (across all regions) per subject
@@ -85,13 +85,16 @@ function [score_t score_s h1 h2 h3] =  plot_correlations(Xdata)
      hold on;
      Ydata = bsxfun(@minus,Xdata(:,:,cc),mean(Xdata(:,:,cc),1));
      %Ydata = bsxfun(@rdivide,Xdata(:,:,cc),std(Xdata(:,:,cc),1));
+     if(cc<=ceil(n/4))
+       title('Time-Series');
+     end
      for pp=1:2:p
        hp = plot(10*pp+Ydata(:,pp),'k-');
        set(hp,'linewidth',2);
      end
      hold off;
      set(children(row_idx),'XTick', [1 m],'YTick', [0 10*(p+1)]);
-     xlabel(['Subject ' num2str(cc)]);
+     xlabel(['Subject ' num2str(cc)]); ylabel(['Stacked Regions'])
    end
 
 
@@ -126,4 +129,4 @@ function [score_t score_s h1 h2 h3] =  plot_correlations(Xdata)
    end
  end
  h2.children = children;
- subplot(1,n_alt+1,n_alt+1); tmph=	imagesc(corr(Xdata(:,:,n_alt)'));  axis off; colorbar; set(tmph,'visible','off');
+ subplot(2,ceil(n_alt/2+1),n_alt+1); tmph=	imagesc(Sigmap(:,:,n_alt));  axis off; colorbar; set(tmph,'visible','off');
