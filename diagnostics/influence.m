@@ -1,10 +1,10 @@
-function [score] = influence(Sigmab,Sigma)
+function [score normscore] = influence(Sigmab,Sigma)
 % influence.m
 % Compute a deletion diagnostic (similar to Cook's D). Need to determine the normalization criterion for this. 
 
 
 	[p1 p2 n] = size(Sigmab); 
-	score = zeros(1,n);  norm = score;
+	score = zeros(1,n);  normscore = score;
 	
 	meanCov = mean(Sigma,3); 
 	% replace with robust estimate?
@@ -14,7 +14,7 @@ function [score] = influence(Sigmab,Sigma)
 		score(cc) = frob_err(Sigmab(:,:,cc),meanCov);
 		%mean(varCov(setdiff(1:n,cc))) 
 	end
-	score = score/(2*mean(score));
+	normscore = score/(2*mean(score));
 
 
 	% Toman's estimate? varCov definition not clear; 
